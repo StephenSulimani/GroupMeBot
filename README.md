@@ -45,7 +45,7 @@ groupMe.Start();
 
 ## Badges
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/StephenSulimani/GroupMeBot/LICENSE)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/StephenSulimani/GroupMeBot/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
 [![GroupMeBot](https://img.shields.io/github/stars/StephenSulimani/GroupMeBot)](https://github.com/StephenSulimani/GroupMeBot)
 
@@ -57,4 +57,4 @@ Please try to maintain the current code style.
 
 ## License
 
-[MIT](https://github.com/StephenSulimani/GroupMeBot/LICENSE)
+[MIT](https://github.com/StephenSulimani/GroupMeBot/blob/master/LICENSE)
