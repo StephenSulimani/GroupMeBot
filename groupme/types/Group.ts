@@ -1,7 +1,9 @@
+import { Member, parseMember } from './Member';
+
 /**
  * Represents a group with various properties such as its ID, name, description, and more.
  * This interface is used to model a group in a system where users can join and interact in a community.
- * 
+ *
  * @interface Group
  */
 interface Group {
@@ -98,10 +100,10 @@ interface Group {
     share_url: string;
 
     /**
-     * The total number of members currently in the group.
-     * @example 100
+     * The array of members in the group.
+     * @example []
      */
-    member_count: number;
+    members: Member[];
 
     /**
      * The total number of messages that have been sent in the group.
@@ -132,9 +134,9 @@ function parseGroup(json: Record<string, any>): Group {
         requires_approval: json['requires_approval'],
         show_join_question: json['show_join_question'],
         share_url: json['share_url'],
-        member_count: json['member_count'],
-        message_count: json['message_count']
+        members: json['members'].map((member: object) => parseMember(member)),
+        message_count: json['messages']['count'],
     };
 }
 
-export { Group, parseGroup }
+export { Group, parseGroup };
