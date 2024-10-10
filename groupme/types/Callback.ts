@@ -47,6 +47,7 @@ interface Callback {
      * The type of the user that initiated this callback.
      * - 'user' - A regular human user
      * - 'system' - A system message
+     * - 'bot' - A bot message
      * @example "user"
      */
     sender_type: string;
