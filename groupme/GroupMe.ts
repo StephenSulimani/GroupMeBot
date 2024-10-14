@@ -43,6 +43,7 @@ class GroupMe extends EventEmitter {
         this.ACCESS_TOKEN = access_token;
         this.SESSION = axios.create({
             validateStatus: () => true,
+            headers: { 'Content-Type': 'application/json' },
         });
         this.SMEE_URL = smee_url;
         this.PORT = port;
@@ -150,13 +151,140 @@ class GroupMe extends EventEmitter {
 
         const response = await this.SESSION.post(
             'https://api.groupme.com/v3/bots/post',
-            JSON.stringify(body),
-            { headers: { 'Content-Type': 'application/json' } }
+            JSON.stringify(body)
         );
 
         if (response.status != 202) {
             throw new Error(
                 `Invalid server status code. Expected 202, received: ${response.status}`
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Deletes a message from a GroupMe group using the message_id and group_id.
+     *
+     * @param group_id - ID of the group where the message was sent.
+     * @param message_id - ID identifying the message in the group
+     * @returns A promise that resolves to a boolean indicating the success of the operation.
+     * @throws Will throw an error if the server response status is not 204.
+     *
+     * @example
+     * const success = await groupMe.DeleteMessage('12345', '12345');
+     * if (success) {
+     *     console.log('Message deleted successfully!');
+     * }
+     */
+    async DeleteMessage(
+        group_id: string,
+        message_id: string
+    ): Promise<boolean> {
+        const response = await this.SESSION.delete(
+            `https://api.groupme.com/v3/conversations/${group_id}/messages/${message_id}?token=${this.ACCESS_TOKEN}`
+        );
+
+        if (response.status != 204) {
+            throw new Error(
+                `Invalid server status code. Expected 204, received: ${response.status}`
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Likes a message in a GroupMe conversation.
+     *
+     * @param conversation_id - The ID that refers to either a GroupMe group or GroupMe Direct Message.
+     * @param message_id - The ID identifying the message in a DM or group.
+     * @returns A promise that resolves to a boolean indicating the success of the operation.
+     * @throws Will throw an error if the serer response status is not 200.
+     *
+     * @example
+     * const success = await groupMe.LikeMessage('12345', '12345');
+     * if (success) {
+     *     console.log('Message liked successfully!');
+     * }
+     */
+    async LikeMessage(
+        conversation_id: string,
+        message_id: string
+    ): Promise<boolean> {
+        const response = await this.SESSION.post(
+            `https://api.groupme.com/v3/messages/${conversation_id}/${message_id}/like?token=${this.ACCESS_TOKEN}`
+        );
+
+        if (response.status != 200) {
+            throw new Error(
+                `Invalid server status code. Expected 200, received: ${response.status}`
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Unlikes a message in a GroupMe conversation.
+     *
+     * @param conversation_id - The ID that refers to either a GroupMe group or GroupMe Direct Message.
+     * @param message_id - The ID identifying the message in a DM or group.
+     * @returns A promise that resolves to a boolean indicating the success of the operation.
+     * @throws Will throw an error if the serer response status is not 200.
+     *
+     * @example
+     * const success = await groupMe.UnlikeMessage('12345', '12345');
+     * if (success) {
+     *     console.log('Message unliked successfully!');
+     * }
+     */
+    async UnlikeMessage(
+        conversation_id: string,
+        message_id: string
+    ): Promise<boolean> {
+        const response = await this.SESSION.post(
+            `https://api.groupme.com/v3/messages/${conversation_id}/${message_id}/unlike?token=${this.ACCESS_TOKEN}`
+        );
+
+        if (response.status != 200) {
+            throw new Error(
+                `Invalid server status code. Expected 200, received: ${response.status}`
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Updates the "bot's" nickname in a given group.
+     *
+     * @param group_id - ID of the group where the nickname should be changed.
+     * @param nickname  - The new nickname for the bot.
+     * @returns A promise that resolves to a boolean indicating the success of the operation.
+     * @throws Will throw an error if the server response status is not 200.
+     *
+     * @example
+     * const success = await groupMe.UpdateNickname('12345', 'Steve');
+     * if (success) {
+     *     console.log('Nickname updated successfully!');
+     * }
+     */
+    async UpdateNickname(group_id: string, nickname: string): Promise<boolean> {
+        const body = {
+            membership: {
+                nickname: nickname,
+            },
+        };
+
+        const response = await this.SESSION.post(
+            `https://api.groupme.com/v3/groups/${group_id}/memberships/update?token=${this.ACCESS_TOKEN}`,
+            JSON.stringify(body)
+        );
+
+        if (response.status != 200) {
+            throw new Error(
+                `Invalid server status code. Expected 200, received: ${response.status}`
             );
         }
 
